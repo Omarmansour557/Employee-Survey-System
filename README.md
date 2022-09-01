@@ -20,8 +20,8 @@
 
 ---
 ##### views (needed to be implemented as a restful API and template view):---
-1.  **employee tree view**  -> *set up by the admin*
-    Every employee can have a parent employee that they report to 
+1.  **employee tree view**  -> *set up by the admin*     Every employee can have a parent employee that they report to as the above fig 
+    ![Untitled Diagram drawio (1)](https://user-images.githubusercontent.com/30774866/187946789-b02f8be0-4a84-424b-89bd-6b33170aaa99.png)
 	
 2. **survey view** 
 
