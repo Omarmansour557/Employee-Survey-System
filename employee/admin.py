@@ -38,4 +38,5 @@ class EmployeeForm(forms.ModelForm):
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
+    readonly_fields = ['id']
 
