@@ -39,4 +39,5 @@ class EmployeeForm(forms.ModelForm):
 class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
     readonly_fields = ['id']
+    list_display = ['id', 'name']
 
