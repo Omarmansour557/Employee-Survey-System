@@ -12,8 +12,8 @@ class EmployeeForm(forms.ModelForm):
         super(EmployeeForm, self).__init__(*args, **kwargs)
 
         
-        if self.instance:
-            self.fields['employees'].initial = self.instance.employees.all()
+        if self.instance.id:
+            self.fields['employees'].initial = self.instance.children
             self.fields['employees'].required = False
  
     def save(self, *args, **kwargs):
