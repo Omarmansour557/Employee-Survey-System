@@ -8,7 +8,7 @@ class Employee(models.Model):
     department = models.CharField(max_length=50)
     job_title = models.CharField(max_length=20)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='employees')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='employee')
 
     def __str__(self) -> str:
         return self.name
