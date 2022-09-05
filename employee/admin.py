@@ -10,11 +10,11 @@ class EmployeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)
+        self.fields['employees'].required = False
 
-        
         if self.instance.id:
             self.fields['employees'].initial = self.instance.children
-            self.fields['employees'].required = False
+
  
     def save(self, *args, **kwargs):
         # FIXME: 'commit' argument is not handled
@@ -23,7 +23,7 @@ class EmployeeForm(forms.ModelForm):
 
         instance = super(EmployeeForm, self).save(commit=False)
         
-        if instance.id != None:
+        if instance.id:
             # set parent = None for the previous employees
             self.fields['employees'].initial.update(parent = None)
             
