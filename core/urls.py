@@ -17,23 +17,15 @@ from re import template
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
     path('accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls'))
-    path('', include('employee.urls')) ,
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
-
-
-
- 
-=======
-    path('accounts/', include('accounts.web_urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('employee/', include('employee.web_urls')),
+    path('api/v1/employee/', include('employee.urls')) ,
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('', TemplateView.as_view(template_name='home.html'), name='home')
+
 ]
->>>>>>> web_profile

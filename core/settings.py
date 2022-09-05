@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     
     #third party
     'rest_framework',
-    'djoser', 
+    # 'djoser', 
 
     
 ]
@@ -155,16 +155,16 @@ REST_FRAMEWORK = {
     ),
 }
 
-DJOSER = {
-    'SERIALIZERS':{
-        'user_create': 'core.serializers.UserCreateSerializer',
-        'current_user': 'core.serializers.UserSerializer'
-    }
-}
+# DJOSER = {
+#     'SERIALIZERS':{
+#         'user_create': 'core.serializers.UserCreateSerializer',
+#         'current_user': 'core.serializers.UserSerializer'
+#     }
+# }
 
 
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+   'AUTH_HEADER_TYPES': ('Bearer',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }

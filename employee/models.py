@@ -13,11 +13,7 @@ class Employee(models.Model):
 
     def __str__(self) -> str:
         return self.name
-<<<<<<< HEAD
 
-
-=======
-    
     @property
     def children(self):
         return self.employees.all()
@@ -31,4 +27,3 @@ class Employee(models.Model):
 
 
     
->>>>>>> web_profile
