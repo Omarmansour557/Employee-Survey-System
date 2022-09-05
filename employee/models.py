@@ -17,7 +17,13 @@ class Employee(models.Model):
     @property
     def children(self):
         return self.employees.all()
-    
+
+    @property
+    def url(self):
+        return self.get_absolute_url()
+
     def get_absolute_url(self):
         return reverse("employee_detail", kwargs={"pk": self.pk})
+
+
     
