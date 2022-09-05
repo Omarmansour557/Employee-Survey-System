@@ -18,3 +18,6 @@ class Employee(models.Model):
     def children(self):
         return self.employees.all()
     
+    def get_absolute_url(self):
+        return reverse("employee_detail", kwargs={"pk": self.pk})
+    
