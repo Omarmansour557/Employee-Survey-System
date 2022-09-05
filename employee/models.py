@@ -12,3 +12,7 @@ class Employee(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    @property
+    def children(self):
+        return self.employees.all()
