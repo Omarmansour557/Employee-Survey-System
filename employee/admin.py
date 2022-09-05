@@ -20,14 +20,14 @@ class EmployeeForm(forms.ModelForm):
         # NOTE: Previously assigned Parents are silently reset
 
         instance = super(EmployeeForm, self).save(commit=False)
-        if commit:
-            if instance.id:
+        if instance.id:
                 # set parent = None for the previous employees
                 self.fields['employees'].initial.update(parent = None)
                 
                 # set parent = current instance for the newly chosen employees
                 self.cleaned_data['employees'].update(parent=instance)
             
+        if commit:
             super(EmployeeForm, self).save()
         else:
             return instance
