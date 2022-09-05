@@ -12,17 +12,17 @@
     <div class="row justify-content-center">
         <ul class="tree">
             {% if employee.parent %}
-                <li><span>{{employee.parent.name}}</span>
+                <li><a href="{{employee.parent.url}}"><span>{{employee.parent.name}}</a></span>
                     <ul>
-                        <li><span><strong>{{employee.name}}</strong></span></li>
+                        <li><a href="{{employee.url}}"><span><strong>{{employee.name}}</strong></a></span></li>
                     </ul>
             {% else %}
-                <li><span><strong>{{employee.name}}</strong></span>
+                <li><a href="{{employee.url}}"><span><strong>{{employee.name}}</strong></span></a>
             {% endif %}
             
                 <ul>
                     {% for child in employee.children %}
-                        <li><span>{{child.name}}</span></li>
+                        <li><a href="{{child.url}}"><span>{{child.name}}</span></a></li>
                     {% endfor %}
                 </ul>
             </li>
