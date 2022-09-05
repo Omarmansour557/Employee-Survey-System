@@ -28,7 +28,7 @@
             </li>
             {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class='nav-link' href="{% url 'profile' user.employee.id %}"><strong>HI {{user.username}}</strong></a>
+                <a class='nav-link' href="{% url 'employee_profile' user.employee.id %}"><strong>HI {{user.username}}</strong></a>
               </li>
             {% endif %}
 
