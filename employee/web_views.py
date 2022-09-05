@@ -9,10 +9,11 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
     model = Employee
     template_name = 'employee_detail.html'
 
-class EmployeeUpdateView(LoginRequiredMixin, UpdateView, UserPassesTestMixin):
+class EmployeeUpdateView(UserPassesTestMixin, UpdateView):
     model = Employee
     template_name = 'employee_update.html'
     fields = ['name', 'department', 'job_title']
 
     def test_func(self):
+        self.request.user == self.get_object().user
         return self.request.user == self.get_object().user
