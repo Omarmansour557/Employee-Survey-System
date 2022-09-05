@@ -1,6 +1,5 @@
 from dataclasses import fields
 from django.contrib import admin
-<<<<<<< HEAD
 from .models import Employee
 from django import forms
 # Register your models here.
@@ -40,10 +39,3 @@ class EmployeeForm(forms.ModelForm):
 class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
 
-=======
-from . import models
-# Register your models here.
-
-
-admin.site.register(models.Employee)
->>>>>>> 1eeb75f (create user registeration)
