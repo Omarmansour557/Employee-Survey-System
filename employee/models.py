@@ -10,7 +10,7 @@ class Employee(models.Model):
     job_title = models.CharField(max_length=20)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='employees')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee')
-
+    surveys = models.ManyToManyField('survey_system.Survey', through='survey_system.EmployeeSurvey', through_fields=('rater', 'survey'))
     def __str__(self) -> str:
         return self.name
 

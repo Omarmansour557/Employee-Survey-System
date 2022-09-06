@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     #local
     'employee',
     'accounts',
+    'survey_system',
     
     #3rd party
     "crispy_forms", 
     "crispy_bootstrap5", 
+    'debug_toolbar',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -168,3 +171,7 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('Bearer',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

@@ -28,7 +28,7 @@ class EmployeeViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Ge
             
         elif  request.method == 'PUT':
             if request.data.get('parent') or request.data.get('children'):
-                return Response('Hazem by1ol')
+                return Response('Cannot edit parent or child. ')
             print(request.data)
             serializer = PutEmployeeSerializer(employee, data=request.data) 
             serializer.is_valid(raise_exception=True)  
