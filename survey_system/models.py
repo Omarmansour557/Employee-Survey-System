@@ -20,17 +20,18 @@ class Survey(models.Model):
         max_length=1, choices=SURVEY_TYPE_CHOICES, default=SURVEY_TYPE_FOLLOWERS)
     end_date = models.DateField()
     start_date = models.DateField() 
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     questions = models.ManyToManyField(Questions)
 
 class Answer(models.Model):
     rating = models.FloatField()
+    quetion = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
 
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()
     rater = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    get_rated = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='get_rated')
+    get_rated = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='get_rated', null=True, blank=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     submited_date = models.DateField()
     answers = models.ManyToManyField(Answer)
