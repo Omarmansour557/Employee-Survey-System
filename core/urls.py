@@ -21,8 +21,9 @@ from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('accounts.web_urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('employee/', include('employee.web_urls')),
     path('api/v1/employee/', include('employee.urls')) ,
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
