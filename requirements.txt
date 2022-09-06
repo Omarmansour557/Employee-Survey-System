@@ -19,3 +19,16 @@ social-auth-core==4.3.0
 sqlparse==0.4.2
 uritemplate==4.1.1
 urllib3==1.26.12
+crispy-bootstrap5==0.6
+dj-database-url==1.0.0
+dj-email-url==1.0.5
+django-cache-url==3.4.2
+django-crispy-forms==1.14.0
+whitenoise==6.2.0
+gunicorn==20.1.0
+marshmallow==3.17.1
+packaging==21.3
+pyparsing==3.0.9
+python-dotenv==0.21.0
+environs==9.5.0
+backports.zoneinfo==0.2.1
