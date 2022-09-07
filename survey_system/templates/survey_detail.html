@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}{{employee_survey.survey.title}}{% endblock title %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/rating-stars.css' %}">
+{% endblock head %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm mt-4">
+                <div class="card-header">
+                    <h3 class="card-title text-center">
+                        <strong>{{employee_survey.survey.title}}</strong>
+                    </h3>
+                    {% if employee_survey.is_submitted %}
+                        <span class="badge badge-success" style="" 
+                        data-toggle="tooltip" data-placement="top" title="You have submitted this survey!">Submitted</span>
+                    {% endif %}
+                    <span class="badge badge-primary" style="" >{{employee_survey.survey.get_survey_type}}</span>
+
+                </div>
+                <div class="card-body">
+                    <div class='mx-4' id='description'>
+                        <div class="row">
+                            <h5><strong>Description:</strong></h5>
+                        </div>
+                        <div class="row">
+                            <p class='ml-3' style="font-size: 1.2rem;">{{employee_survey.survey.description}}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    {% if employee_survey.get_rated %}
+                        <div class="mx-4" id="getting_rated">
+                            <div class="row">
+                                <h5><strong>You are rating:</strong></h5>
+                            </div>
+                            <div class="row">
+                                <a href="{% url 'employee_detail' employee_survey.get_rated.pk %}" class='ml-3' style="text-decoration: none;"><strong>{{employee_survey.get_rated.name}}</strong></a>
+                            </div>
+                        </div>
+
+                        <hr>
+                    {% endif %}
+                    
+                    <div class='mx-4' id="questions">
+                        <div class="row">
+                            <h5><strong>Questions:</strong></h5>
+                            <div class="container">
+                                <div class="row">
+                                    <ul>
+                                        {% if employee_survey.get_answers %}
+                                            {% for answer in employee_survey.get_answers %}
+                                                <li>
+                                                    <div class="col-12">
+                                                        <p><strong>{{answer.question.description}}</strong></p>
+                                                        <p>
+                                                            <label class="rating-label">
+                                                                <input
+                                                                class="rating"
+                                                                max="5"
+                                                                oninput="this.style.setProperty('--value', this.value)"
+                                                                step="0.5"
+                                                                type="range"
+                                                                value="1" style="--value:{{answer.rating}}"
+                                                                disabled>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for question in employee_survey.survey.get_questions %}
+                                                <li>
+                                                    <div class="col-12">
+                                                        <p><strong>{{question.description}}</strong></p>
+                                                    </div>
+                                                </li>   
+                                    
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block scripts %}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
+    </script>
+{% endblock scripts %}

@@ -13,18 +13,35 @@
         <div class="card-body">
             {% for survey in survey_list %}
                 <a href="{% url 'survey_detail' survey.pk %}">
-                    <div class="card shadow-sm">
-
-                        <h5 class="card-header"></h5>
-
+                  <div class="card shadow-sm">
+                        <h4 class="card-header">{{survey.survey.title}}</h4>
                         <div class="card-body">
+                          
                             <div class="card-text">
-                                <p>
-                                {{survey.survey.description}}
-                                </p>
+                              <div class="container">
+                                <div class="row">
+                                    <h5>Description:</h5>
+                                </div>
+                                <div class="row">
+                                  <p class='ml-3'>{{survey.survey.description}}</p>
+                                </div>
+                                <div class="row justify-content-between">
+                                  <div class="col-4">
+                                    <p>
+                                      Start Date: {{survey.survey.start_date}}
+                                    </p>
+                                  </div>
+
+                                  <div class="col-4">
+                                    <p>
+                                      End Date: {{survey.survey.end_date}}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                         </div>
-                    </div>
+                      </div>
                 </a>
             {% endfor %} 
 

@@ -22,3 +22,7 @@ def employee_survey_list_view(request):
     }
 
     return render(request, template_name, context)
+class EmployeeSurveyDetailView(DetailView):
+    model = EmployeeSurvey
+    template_name='survey_detail.html'
+    context_object_name = 'employee_survey'
