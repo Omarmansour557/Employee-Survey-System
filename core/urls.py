@@ -22,7 +22,6 @@ import debug_toolbar
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.web_urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('employee/', include('employee.web_urls')),
     path('api/v1/employee/', include('employee.urls')) ,
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
