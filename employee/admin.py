@@ -5,16 +5,40 @@ from django import forms
 # Register your models here.
 
 class EmployeeForm(forms.ModelForm):
-    employees = forms.ModelMultipleChoiceField(queryset=Employee.objects.all())    
+    employees = forms.ModelMultipleChoiceField(queryset=None)    
 
 
     def __init__(self, *args, **kwargs):
+        """
+        Overriding __init__ so we can set up 
+        the query set of the employees field with filters
+        and perform some filtering on the initial selected values on it
+        """
+
         super(EmployeeForm, self).__init__(*args, **kwargs)
         self.fields['employees'].required = False
 
         if self.instance.id:
+            children_queryset = self.employees = Employee.objects.exclude(id=self.instance.id)
+            if self.instance.parent:
+                children_queryset = children_queryset.exclude(id=self.instance.parent.id)
+            self.fields['employees'].queryset= children_queryset
             self.fields['employees'].initial = self.instance.children
 
+    def clean(self):
+        """
+        Overriding clean to perform an extra validation check
+        on wether the user chose thier parent as a child or not
+        if not then we raise a validation error to let the user know
+        """
+
+        employee_parent = self.data.get('parent')
+        employee_children = self.data.getlist('employees')
+
+        if employee_parent in employee_children:
+            raise forms.ValidationError("You can not add the parent as a child")
+
+        return super().clean()
  
     def save(self, commit=True):
         # NOTE: Previously assigned Parents are silently reset
