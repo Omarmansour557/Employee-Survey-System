@@ -22,6 +22,10 @@ class Survey(models.Model):
     start_date = models.DateField() 
     description = models.TextField(blank=True, null=True)
     questions = models.ManyToManyField(Questions)
+    title = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.title
 
 class Answer(models.Model):
     rating = models.FloatField()

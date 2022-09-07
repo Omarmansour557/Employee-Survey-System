@@ -25,6 +25,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('employee/', include('employee.web_urls')),
     path('api/employee/', include('employee.urls')) ,
+    path("api/survey/", include('survey_system.urls')),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),

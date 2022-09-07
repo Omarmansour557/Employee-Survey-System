@@ -156,6 +156,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+        'PAGE_SIZE': 10
 }
 
 # DJOSER = {
@@ -176,8 +177,3 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-
-
-REST_FRAMEWORK = {
-    'PAGE_SIZE': 10
-}

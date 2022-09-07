@@ -1,10 +1,17 @@
 
 from dataclasses import fields
+from pyexpat import model
 from rest_framework import serializers
 
-import employee
 from  .models import Employee
 from django.contrib.auth.models import User
+from survey_system.models import Questions, Survey
+
+
+class SurveySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = ['survey_type', 'end_date', 'start_date', 'description', 'title', 'questions']
 
 class ChildrenSeriallizer(serializers.ModelSerializer):
     class Meta:
@@ -13,17 +20,19 @@ class ChildrenSeriallizer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     children = ChildrenSeriallizer(many=True)
+    parent = serializers.StringRelatedField()
     class Meta:
         model = Employee
         fields = ['id', 'name', 'department','children',  'job_title', 'parent']
 class PutEmployeeSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Employee
         fields = ['id', 'name', 'department','job_title']
             
         
 class UserSerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer(required=True)
+    employee = PutEmployeeSerializer()
     class Meta:
         model = User
         fields = ('username', 'email', 'password','employee')
@@ -34,9 +43,10 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username = validated_data['username'],
             email = validated_data['email'],
-            employee = validated_data['employee'],
+         
             password = validated_data['password']
         )
+        
 
         employee_data = validated_data.pop('employee')
         # create profile
