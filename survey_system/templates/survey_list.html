@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Surveys{% endblock title %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/card-links.css' %}">
+{% endblock head %}
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow mt-4">
+        <h3 class="card-header text-center">User Surveys</h3>
+        <div class="card-body">
+            {% for survey in survey_list %}
+                <a href="{% url 'survey_detail' survey.pk %}">
+                    <div class="card shadow-sm">
+
+                        <h5 class="card-header"></h5>
+
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p>
+                                {{survey.survey.description}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %} 
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock body %}

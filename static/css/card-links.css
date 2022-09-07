@@ -1,0 +1,14 @@
+a:link {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited .card {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover .card {
+    background-color: transparent;
+    text-decoration: none;
+}
