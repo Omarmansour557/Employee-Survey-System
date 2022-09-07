@@ -20,6 +20,9 @@
                     {% if employee_survey.is_submitted %}
                         <span class="badge badge-success" style="" 
                         data-toggle="tooltip" data-placement="top" title="You have submitted this survey!">Submitted</span>
+                    {% else %}
+                    <span class="badge badge-danger" style="" 
+                    data-toggle="tooltip" data-placement="top" title="Survey not yet submitted!">Open</span>
                     {% endif %}
                     <span class="badge badge-primary" style="" >{{employee_survey.survey.get_survey_type}}</span>
 
@@ -46,48 +49,77 @@
 
                         <hr>
                     {% endif %}
-                    
-                    <div class='mx-4' id="questions">
-                        <div class="row">
-                            <h5><strong>Questions:</strong></h5>
-                            <div class="container">
-                                <div class="row">
-                                    <ul>
-                                        {% if employee_survey.get_answers %}
-                                            {% for answer in employee_survey.get_answers %}
-                                                <li>
-                                                    <div class="col-12">
-                                                        <p><strong>{{answer.question.description}}</strong></p>
-                                                        <p>
-                                                            <label class="rating-label">
-                                                                <input
-                                                                class="rating"
-                                                                max="5"
-                                                                oninput="this.style.setProperty('--value', this.value)"
-                                                                step="0.5"
-                                                                type="range"
-                                                                value="1" style="--value:{{answer.rating}}"
-                                                                disabled>
-                                                            </label>
-                                                        </p>
-                                                    </div>
-                                                </li>
-                                            {% endfor %}
-                                        {% else %}
-                                            {% for question in employee_survey.survey.get_questions %}
-                                                <li>
-                                                    <div class="col-12">
-                                                        <p><strong>{{question.description}}</strong></p>
-                                                    </div>
-                                                </li>   
-                                    
-                                            {% endfor %}
-                                        {% endif %}
-                                    </ul>
+
+                {% if not employee_survey.is_submitted %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                {% endif %}
+                        <div class='mx-4' id="questions">
+                            <div class="row">
+                                <h5><strong>Questions:</strong></h5>
+                                <div class="container">
+                                    <div class="row">
+                                        <ul>
+                                            {% if employee_survey.is_submitted %}
+                                                {% for answer in employee_survey.get_answers %}
+                                                    <li>
+                                                        <div class="col-12">
+                                                            <p><strong>{{answer.question.description}}</strong></p>
+                                                            <p>
+                                                                <label class="rating-label">
+                                                                    <input
+                                                                    class="rating"
+                                                                    max="5"
+                                                                    oninput="this.style.setProperty('--value', this.value)"
+                                                                    step="0.5"
+                                                                    type="range"
+                                                                    value="1" style="--value:{{answer.rating}}"
+                                                                    disabled>
+                                                                </label>
+                                                            </p>
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            {% else %}
+                                                    {% for question in employee_survey.survey.get_questions %}
+                                                        <li>
+                                                            <div class="col-12">
+                                                                <p><strong>{{question.description}}</strong></p>
+                                                                <p>
+                                                                    <label class="rating-label">
+                                                                        <input
+                                                                        class="rating"
+                                                                        max="5"
+                                                                        oninput="this.style.setProperty('--value', this.value)"
+                                                                        step="0.5"
+                                                                        type="range"
+                                                                        value="0" 
+                                                                        name="answer"
+                                                                        style="--value:0"
+                                                                        >
+                                                                    </label>
+                                                                </p>
+                                                            </div>
+                                                        </li>
+                                            
+                                                    {% endfor %}
+                                                
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% if not employee_survey.is_submitted %}
+                                        <div class="row justify-content-center">
+                                            <button type="submit" class="btn bg-success text-light">Submit</button>
+                                        </div>
+                                    {% endif %}
                                 </div>
+                            
+                            
                             </div>
                         </div>
-                    </div>
+                {% if not employee_survey.is_submitted %}
+                    </form>
+                {% endif %}
                 </div>
             </div>
         </div>
