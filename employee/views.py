@@ -4,6 +4,7 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.pagination import PageNumberPagination
 from employee.models import Employee
 from employee.serializers import EmployeeSerializer, UserSerializer, PutEmployeeSerializer
 from .models import Employee
@@ -23,6 +24,7 @@ class EmployeeViewSet(CreateModelMixin,
     queryset = Employee.objects.all()
     serializer_class =EmployeeSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
     @action(detail=False, methods= ['GET', 'PUT'] , permission_classes=[IsAuthenticated])
     def me(self, request):
         (employee, created) = Employee.objects.get_or_create(user_id=request.user.id)
