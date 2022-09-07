@@ -30,8 +30,8 @@ class Answer(models.Model):
 
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()
-    rater = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    rater = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='surveys')
     get_rated = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='get_rated', null=True, blank=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-    submited_date = models.DateField()
+    submited_date = models.DateField(blank=True, null=True)
     answers = models.ManyToManyField(Answer)
