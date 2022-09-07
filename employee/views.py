@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.decorators import action
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin  
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin  
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -15,7 +15,11 @@ class SignUpViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, Gene
     permission_classes = [AllowAny]
 
  
-class EmployeeViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+class EmployeeViewSet(CreateModelMixin,
+                   RetrieveModelMixin,
+                   UpdateModelMixin,
+                   ListModelMixin,
+                   GenericViewSet):
     queryset = Employee.objects.all()
     serializer_class =EmployeeSerializer
     permission_classes = [IsAuthenticated]
