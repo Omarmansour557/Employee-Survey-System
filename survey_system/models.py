@@ -4,6 +4,9 @@ from employee.models import Employee
 
 class Questions(models.Model):
     description = models.TextField()
+
+    def __str__(self):
+        return self.description
 class Survey(models.Model):
 
     SURVEY_TYPE_FOLLOWERS = 'F'
@@ -32,9 +35,15 @@ class Survey(models.Model):
     def get_survey_type(self):
         return self.get_survey_type_display()
 
+    def __str__(self):
+        return self.title
+
 class Answer(models.Model):
     rating = models.FloatField()
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.question}: {self.rating}"
 
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()

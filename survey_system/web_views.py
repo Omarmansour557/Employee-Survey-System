@@ -20,7 +20,7 @@ def employee_survey_list_view(request):
         return redirect('login')
 
     context={
-        'survey_list': user.employee.survey_set.all()
+        'employee_survey_list': user.employee.survey_set.all()
     }
 
     return render(request, template_name, context)

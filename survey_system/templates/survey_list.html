@@ -3,6 +3,8 @@
 {% load static %}
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/card-links.css' %}">
+<link rel="stylesheet" href="{% static 'css/card-hover.css' %}">
+
 {% endblock head %}
 {% block body %}
 <div class="container">
@@ -11,10 +13,22 @@
       <div class="card shadow mt-4">
         <h3 class="card-header text-center">User Surveys</h3>
         <div class="card-body">
-            {% for survey in survey_list %}
-                <a href="{% url 'survey_detail' survey.pk %}">
-                  <div class="card shadow-sm">
-                        <h4 class="card-header">{{survey.survey.title}}</h4>
+            {% for employee_survey in employee_survey_list %}
+                  <div class="card card-hover shadow-sm my-3">
+                    <a href="{% url 'survey_detail' employee_survey.pk %}">
+                        <div class="card-header">
+                          <h4 class="card-card-title">
+                            {{employee_survey.survey.title}}
+                            {% if employee_survey.is_submitted %}
+                              <span class="badge badge-success ml-1" style="font-size:45%">Submitted</span>
+                            {% else %}
+                              <span class="badge badge-danger ml-1" style="font-size:45%">Open</span>
+                            {% endif %}
+                            <span class="badge badge-primary ml-1" style="font-size:45%">{{employee_survey.survey.get_survey_type}}</span>
+
+                          </h4>
+                          
+                        </div>
                         <div class="card-body">
                           
                             <div class="card-text">
@@ -23,26 +37,27 @@
                                     <h5>Description:</h5>
                                 </div>
                                 <div class="row">
-                                  <p class='ml-3'>{{survey.survey.description}}</p>
+                                  <p class='ml-3'>{{employee_survey.survey.description}}</p>
                                 </div>
                                 <div class="row justify-content-between">
                                   <div class="col-4">
                                     <p>
-                                      Start Date: {{survey.survey.start_date}}
+                                      Start Date: {{employee_survey.survey.start_date}}
                                     </p>
                                   </div>
 
                                   <div class="col-4">
                                     <p>
-                                      End Date: {{survey.survey.end_date}}
+                                      End Date: {{employee_survey.survey.end_date}}
                                     </p>
                                   </div>
                                 </div>
                               </div>
                             </div>
                         </div>
-                      </div>
-                </a>
+                      </a>
+
+                  </div>
             {% endfor %} 
 
         </div>
