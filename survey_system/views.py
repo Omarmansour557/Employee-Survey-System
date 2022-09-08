@@ -24,14 +24,14 @@ class SurveyViewSet(RetrieveModelMixin,
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        employee_object = self.request.user.employee
-             
+        employee_object = self.request.user.employee    
         return employee_object.survey_set.all()
 
-    # @action(detail=False, methods= ['GET', 'PUT'] , permission_classes=[IsAuthenticated])
-    # def me(self, request):
-
-    #     if request.method == 'GET':
-    #         serializer = EmployeeSurveySerializer(employee_surveys, many=True)
-    #         return Response(serializer.data)
-
+    @action(detail=True, methods= ['GET', 'POST'] , permission_classes=[IsAuthenticated])
+    def questions(self, request, pk):
+        if request.method == 'GET':
+            employee_object = self.request.user.employee
+            survey = employee_object.survey_set.filter(id=pk)
+            serializer = EmployeeSurveySerializer(survey, many=True)
+            return Response(serializer.data)
+        return Response('ok')

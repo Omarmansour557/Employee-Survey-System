@@ -4,7 +4,7 @@ from .models import Survey , EmployeeSurvey
 class SurveySerializer(serializers.ModelSerializer):
     class Meta:
         model = Survey
-        fields = ['survey_type', 'end_date', 'start_date', 'description', 'title', 'questions']
+        fields = ['id','survey_type', 'end_date', 'start_date', 'description', 'title', 'questions']
 
 class EmployeeSurveySerializer(serializers.ModelSerializer):
     class Meta:
