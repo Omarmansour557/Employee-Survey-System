@@ -1,9 +1,13 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, ListView
 from .models import Employee
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
+
+class EmployeeListView(LoginRequiredMixin, ListView):
+    model = Employee
+    template_name = 'employee_list.html'
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
     model = Employee
