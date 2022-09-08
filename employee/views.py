@@ -17,17 +17,6 @@ class SignUpViewSet(CreateModelMixin, GenericViewSet):
     permission_classes = [AllowAny]
 
 
-class SurveyViewSet( RetrieveModelMixin,
-                   UpdateModelMixin,
-                   ListModelMixin,
-                   GenericViewSet):
-
-
- queryset = Survey.objects.all()                  
- serializer_class = SurveySerializer
- permission_classes = [IsAuthenticated]
- pagination_class = PageNumberPagination
-
  
 class EmployeeViewSet(
                    RetrieveModelMixin,
