@@ -24,7 +24,6 @@ from survey_system.web_views import employee_survey_list_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.web_urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
     path('employee/', include('employee.web_urls')),
     path('survey/', include('survey_system.web_urls')),
     path('api/v1/employee/', include('employee.urls')) ,
