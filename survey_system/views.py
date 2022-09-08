@@ -31,7 +31,11 @@ class SurveyViewSet(RetrieveModelMixin,
     def questions(self, request, pk):
         if request.method == 'GET':
             employee_object = self.request.user.employee
-            survey = employee_object.survey_set.filter(id=pk)
-            serializer = EmployeeSurveySerializer(survey, many=True)
+            survey_employee = employee_object.survey_set.filter(id=pk)
+            survey_id = survey_employee.values('survey')[0]['survey']
+            # print(survey_employee.values('survey')[0]['survey'])
+            survey_detail = Survey.objects.filter(id=survey_id)
+            
+            serializer = SurveySerializer(survey_detail, many=True)
             return Response(serializer.data)
         return Response('ok')
