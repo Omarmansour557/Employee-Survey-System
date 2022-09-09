@@ -4,6 +4,9 @@ from employee.models import Employee
 
 class Questions(models.Model):
     description = models.TextField()
+
+    def __str__(self):
+        return self.description
 class Survey(models.Model):
 
     SURVEY_TYPE_FOLLOWERS = 'F'
@@ -24,12 +27,24 @@ class Survey(models.Model):
     questions = models.ManyToManyField(Questions)
     title = models.CharField(max_length=50)
 
-    def __str__(self) -> str:
+
+    @property
+    def get_questions(self):
+        return self.questions.all()
+
+    @property
+    def get_survey_type(self):
+        return self.get_survey_type_display()
+
+    def __str__(self):
         return self.title
 
 class Answer(models.Model):
     rating = models.FloatField()
-    quetion = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.question}: {self.rating}"
 
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()
@@ -42,4 +57,12 @@ class EmployeeSurvey(models.Model):
     # def __str__(self) -> str:
     #     return self.rater
 
+
+
+    submited_date = models.DateField(blank=True, null=True)
+    answers = models.ManyToManyField(Answer, blank=True)
+
+    @property
+    def get_answers(self):
+        return self.answers.all()
 

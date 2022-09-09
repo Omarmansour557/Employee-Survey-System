@@ -1,9 +1,9 @@
 # Intern Final Project: Employee Survey System 
 
-###### Start Date:
-###### Milestone one date: 
-###### Milestone two date: 
-###### End Date:
+###### Start Date: 4-9-2022
+###### Milestone one date: 6-9-2022
+###### Milestone two date: 8-9-2022
+###### End Date: 13-9-2022
 
 ---
 ##### **system actors:**
@@ -38,6 +38,7 @@
 	- followers --> mean that all the parents will get a survey on every child in their tree (for example a senior software engineer reviewing his team juniors engineer  )
 	- reversed --> means all the children will receive a survey on the parent employee
 ---
+**Please don't forget to include a postman collection of the project API.**
 ##### bonus points:
 
 - Admin can lunch a survey for certain job titles or department

@@ -9,6 +9,11 @@
 {% block body %}
 
 <div class="container">
+    {% if user.employee == employee %}
+        <div class="row justify-content-end my-3">
+            <a href="{% url 'employee_update' employee.pk %}" class="btn bg-success text-light">Edit</a>
+        </div>
+    {% endif %}
     <div class="row justify-content-center">
         <ul class="tree">
             {% if employee.parent %}
