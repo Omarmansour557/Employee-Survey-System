@@ -2,6 +2,7 @@ from dataclasses import fields
 from django.contrib import admin
 from .models import Employee
 from django import forms
+from django.db.models import Q
 # Register your models here.
 
 class EmployeeForm(forms.ModelForm):
@@ -19,7 +20,7 @@ class EmployeeForm(forms.ModelForm):
         self.fields['employees'].required = False
 
         if self.instance.id:
-            children_queryset = self.employees = Employee.objects.exclude(id=self.instance.id)
+            children_queryset = self.employees = Employee.objects.exclude(id=self.instance.id).filter(Q(parent=self.instance) | Q(parent__isnull=True))
             if self.instance.parent:
                 children_queryset = children_queryset.exclude(id=self.instance.parent.id)
             self.fields['employees'].queryset= children_queryset
