@@ -39,6 +39,9 @@ class SurveyViewSet(RetrieveModelMixin,
             for answer in answers:
                 if answer.quetion not in survey_questions:
                     return Response({'errors': 'This Question Not in This Survey '})
+
                 employee_survey.answers.add(answer)
-                employee_survey.save()
+
+            employee_survey.is_submitted = 'True'
+            employee_survey.save()
             return Response(serializer.data)

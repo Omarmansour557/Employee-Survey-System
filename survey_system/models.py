@@ -39,7 +39,7 @@ class EmployeeSurvey(models.Model):
     submited_date = models.DateField()
     answers = models.ManyToManyField(Answer)
     
-    def __str__(self) -> str:
-        return self.rater
+    # def __str__(self) -> str:
+    #     return self.rater
 
 
