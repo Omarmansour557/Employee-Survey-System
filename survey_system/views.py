@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Survey, EmployeeSurvey
-from .serializers import AnswerSerializer, SurveySerializer, EmployeeSurveySerializer
+from .serializers import AnswerSerializer, SurveySerializer, EmployeeSurveySerializer, QuestionSerializer
 from  employee.models import Employee
 class SurveyViewSet(RetrieveModelMixin,
                    UpdateModelMixin,
@@ -26,12 +26,9 @@ class SurveyViewSet(RetrieveModelMixin,
     @action(detail=True, methods= ['GET', 'POST'] , permission_classes=[IsAuthenticated])
     def SubmitAnswer(self, request, pk):
         if request.method == 'GET':
-            employee_object = self.request.user.employee
-            survey_employee = employee_object.survey_set.filter(id=pk)
-            survey_id = survey_employee.values('survey')[0]['survey']
-            survey_detail = Survey.objects.filter(id=survey_id)
-            serializer = SurveySerializer(survey_detail, many=True)
-        
+            employee_survey = EmployeeSurvey.objects.get(pk=pk)
+            questions = employee_survey.survey.questions.all()
+            serializer = QuestionSerializer(questions, many=True)
             return Response(serializer.data)
         elif request.method =='POST':
             serializer = AnswerSerializer(data=request.data, many=True)
@@ -41,7 +38,7 @@ class SurveyViewSet(RetrieveModelMixin,
             survey_questions = employee_survey.survey.questions.all()
             for answer in answers:
                 if answer.quetion not in survey_questions:
-                    return Response({'errors': 'This Question No in This Survey '})
+                    return Response({'errors': 'This Question Not in This Survey '})
                 employee_survey.answers.add(answer)
                 employee_survey.save()
             return Response(serializer.data)
