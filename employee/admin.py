@@ -24,6 +24,8 @@ class EmployeeForm(forms.ModelForm):
                 children_queryset = children_queryset.exclude(id=self.instance.parent.id)
             self.fields['employees'].queryset= children_queryset
             self.fields['employees'].initial = self.instance.children
+        else:
+            self.fields['employees'].queryset= Employee.objects.exclude(parent__isnull=False)
 
     def clean(self):
         """
