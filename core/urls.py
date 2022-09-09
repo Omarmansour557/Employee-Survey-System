@@ -25,8 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.web_urls')),
     path('employee/', include('employee.web_urls')),
-    path('survey/', include('survey_system.web_urls')),
-    path('api/v1/employee/', include('employee.urls')) ,
+
+    path('api/employee/', include('employee.urls')) ,
+    path("api/survey/", include('survey_system.urls')),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('', employee_survey_list_view, name='home'),
