@@ -1,6 +1,4 @@
 
-from dataclasses import fields
-from pyexpat import model
 from rest_framework import serializers
 
 from  .models import Employee
@@ -35,6 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
     employee = PutEmployeeSerializer()
     class Meta:
         model = User
+        extra_kwargs = {'password': {'write_only': True}}  
         fields = ('username', 'email', 'password','employee')
 
     def create(self, validated_data):
@@ -43,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username = validated_data['username'],
             email = validated_data['email'],
-         
+            
             password = validated_data['password']
         )
         
@@ -57,5 +56,7 @@ class UserSerializer(serializers.ModelSerializer):
             job_title = employee_data['job_title']
             
         )
-
-        return user
+        
+        return UserSerializer(user).data
+        # user.pop('password')
+        # return user

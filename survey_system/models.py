@@ -31,7 +31,6 @@ class Answer(models.Model):
     rating = models.FloatField()
     quetion = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
-
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()
     rater = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='survey_set')
@@ -39,5 +38,8 @@ class EmployeeSurvey(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     submited_date = models.DateField()
     answers = models.ManyToManyField(Answer)
+    
+    def __str__(self) -> str:
+        return self.rater
 
 
