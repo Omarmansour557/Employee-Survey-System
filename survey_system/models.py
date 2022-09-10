@@ -37,36 +37,29 @@ class Survey(models.Model):
 
   
     def __str__(self) -> str:
-        return self.title
+        return str(self.id)
 
 class Answer(models.Model):
     rating = models.FloatField()
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
-<<<<<<< HEAD
     def __str__(self):
         return f"{self.question}: {self.rating}"
 
-=======
->>>>>>> PAGTBI-6
 class EmployeeSurvey(models.Model):
     is_submitted =models.BooleanField()
     rater = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='survey_set')
     get_rated = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='get_rated', null=True, blank=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
-<<<<<<< HEAD
     submited_date = models.DateField(blank=True, null=True)
     answers = models.ManyToManyField(Answer, blank=True)
 
     @property
     def get_answers(self):
         return self.answers.all()
-=======
     submited_date = models.DateField()
     answers = models.ManyToManyField(Answer)
     
     # def __str__(self) -> str:
     #     return self.rater
 
-
->>>>>>> PAGTBI-6
