@@ -46,6 +46,9 @@ class SurveyViewSet(RetrieveModelMixin,
             serializer = QuestionSerializer(questions, many=True)
             return Response(serializer.data)
         elif request.method =='POST':
+            employee_object = self.request.user.employee
+            if employee_object.surveys.filter(end_date__gte = today).distinct(): 
+                return Response({'errors':'You cannot submit answers because This Survey was ended!'})
             serializer = AnswerSerializer(data=request.data, many=True)
             serializer.is_valid(raise_exception=True)
             answers = serializer.save()
