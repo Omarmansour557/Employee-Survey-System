@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 from environs import Env
 from datetime import timedelta
+from celery.schedules import crontab
 
 env = Env()
 env.read_env()
@@ -176,4 +177,12 @@ SIMPLE_JWT = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BEAT_SCHEDULE = {
+    'notify_customers': {
+        'task': 'survey_system.tasks.notify_employees',
+        'schedule':5,
+        'args':['Hello World'],
+    }
+}
 
