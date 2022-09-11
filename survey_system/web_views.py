@@ -52,12 +52,18 @@ def employee_survey_detail_view(request, pk):
         employee_survey = model.objects.get(pk=pk)
         questions = employee_survey.survey.get_questions
         answers = request.POST.getlist('answer')
-    
-        for question, answer in zip(questions, answers):
-            answer = Answer(question=question, rating=answer)
-            answer.save()
-            employee_survey.answers.add(answer)
-        employee_survey.is_submitted = True
+
+        if employee_survey.answers.all():
+            for old_answer, new_answer in zip(employee_survey.answers.all(), answers):
+                old_answer.rating = new_answer
+                old_answer.save()
+        else:
+            for question, answer in zip(questions, answers):
+                answer = Answer(question=question, rating=answer)
+                answer.save()
+                employee_survey.answers.add(answer)
+
+            employee_survey.is_submitted = True
         employee_survey.save()
 
         return redirect('survey_detail', pk)

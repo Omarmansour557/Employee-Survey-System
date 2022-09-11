@@ -50,7 +50,7 @@
                         <hr>
                     {% endif %}
 
-                {% if not employee_survey.is_submitted %}
+                {% if not employee_survey.survey.is_expired %}
                     <form action="" method="post">
                         {% csrf_token %}
                 {% endif %}
@@ -60,7 +60,7 @@
                                 <div class="container">
                                     <div class="row">
                                         <ul>
-                                            {% if employee_survey.is_submitted %}
+                                            {% if employee_survey.is_submitted or employee_survey.survey.is_expired %}
                                                 {% for answer in employee_survey.get_answers %}
                                                     <li>
                                                         <div class="col-12">
@@ -72,15 +72,20 @@
                                                                     max="5"
                                                                     oninput="this.style.setProperty('--value', this.value)"
                                                                     step="0.5"
+                                                                    name="answer"
                                                                     type="range"
-                                                                    value="1" style="--value:{{answer.rating}}"
-                                                                    disabled>
+                                                                    value="{{answer.rating}}" style="--value:{{answer.rating}}"
+                                                                    {% if employee_survey.survey.is_expired %}disabled{% endif %}
+                                                                    >
                                                                 </label>
                                                             </p>
                                                         </div>
                                                     </li>
+                                                {% empty %}
+                                                    <p>No Answers</p>
                                                 {% endfor %}
                                             {% else %}
+                                                    
                                                     {% for question in employee_survey.survey.get_questions %}
                                                         <li>
                                                             <div class="col-12">
@@ -96,6 +101,7 @@
                                                                         value="0" 
                                                                         name="answer"
                                                                         style="--value:0"
+                                                                        {% if employee_survey.survey.is_expired %}disabled{% endif %}
                                                                         >
                                                                     </label>
                                                                 </p>
@@ -107,7 +113,7 @@
                                             {% endif %}
                                         </ul>
                                     </div>
-                                    {% if not employee_survey.is_submitted %}
+                                    {% if not employee_survey.survey.is_expired %}
                                         <div class="row justify-content-center">
                                             <button type="submit" class="btn bg-success text-light">Submit</button>
                                         </div>
@@ -117,7 +123,7 @@
                             
                             </div>
                         </div>
-                {% if not employee_survey.is_submitted %}
+                {% if not employee_survey.survey.is_expired %}
                     </form>
                 {% endif %}
                 </div>

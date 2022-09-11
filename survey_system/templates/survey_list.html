@@ -24,6 +24,12 @@
                             {% else %}
                               <span class="badge badge-danger ml-1" style="font-size:45%">Open</span>
                             {% endif %}
+
+                            {% if employee_survey.survey.is_expired %}
+                              <span class="badge badge-secondary ml-1" style="font-size:45%">Expired</span>
+                            {% else %}
+                              <span class="badge badge-warning ml-1" style="font-size:45%">Due</span>
+                            {% endif %}
                             <span class="badge badge-primary ml-1" style="font-size:45%">{{employee_survey.survey.get_survey_type}}</span>
 
                           </h4>
