@@ -8,9 +8,9 @@
 {% endblock head %}
 {% block body %}
 <div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow mt-4">
+  <div class="row mt-4">
+    <div class="col-10">
+      <div class="card shadow">
         <h3 class="card-header text-center">User Surveys</h3>
         <div class="card-body">
             {% for employee_survey in employee_survey_list %}
@@ -81,7 +81,44 @@
 
         </div>
       </div>
+    </div><!--Main Card-->
+
+    <div class="col-2">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h3 class="card-title text-center">Order by</h3>
+        </div>
+        <div class="card-body">
+          <form method="GET">
+
+            <div class="form-check">
+              <input {% if order_by == 'title' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-title" value="title">
+              <label class="form-check-label" for="order-title">Title</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'start_date' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-start" value="start_date">
+              <label class="form-check-label" for="order-start">Start Date</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'end_date' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-end" value="end_date">
+              <label class="form-check-label" for="order-end">End Date</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'is_submitted' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-submitted" value="is_submitted">
+              <label class="form-check-label" for="order-submitted">Submitted</label>
+            </div>
+
+            <div class="form-group">
+              <button class="btn bg-primary text-light mt-2" type="submit">Order</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
 

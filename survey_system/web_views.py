@@ -15,6 +15,14 @@ def employee_survey_list_view(request):
     user = request.user
 
     today = datetime.now()
+
+    order_by = request.GET.get('order', '')
+    print(order_by)
+
+    if order_by:
+        queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"survey__{order_by}")
+    else:
+        queryset = user.employee.survey_set.filter(survey__start_date__lte=today)
     
     if user.is_staff:
             return redirect('admin:index')
@@ -22,18 +30,12 @@ def employee_survey_list_view(request):
         return redirect('login')
 
     context={
-        'employee_survey_list': user.employee.survey_set.filter(survey__start_date__lte=today)
+        'order_by':order_by,
+        'employee_survey_list': queryset
     }
 
     return render(request, template_name, context)
-class EmployeeSurveyDetailView(DetailView):
-    model = EmployeeSurvey
-    template_name='survey_detail.html'
-    context_object_name = 'employee_survey'
 
-    def post(self, request, pk):
-        # print(request.body)
-        HttpResponse('ss')
 
 def employee_survey_detail_view(request, pk):
     model = EmployeeSurvey
@@ -41,6 +43,7 @@ def employee_survey_detail_view(request, pk):
     context_object_name = 'employee_survey'
 
     if request.method == 'GET':
+
         context = {
             context_object_name: model.objects.get(pk=pk)
         }
