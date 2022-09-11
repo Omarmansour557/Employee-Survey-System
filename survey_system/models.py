@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from employee.models import Employee
 # Create your models here
@@ -36,6 +37,10 @@ class Survey(models.Model):
     def get_survey_type(self):
         return self.get_survey_type_display()
 
+    @property
+    def is_expired(self):
+        return self.end_date < datetime.today().date()
+
     def __str__(self):
         return self.title
 
@@ -57,4 +62,7 @@ class EmployeeSurvey(models.Model):
     @property
     def get_answers(self):
         return self.answers.all()
+    
+    def __str__(self) -> str:
+        return f"{self.rater} rating {self.get_rated} on survey {self.survey.title}"
 

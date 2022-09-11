@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
@@ -13,6 +14,7 @@ def employee_survey_list_view(request):
     template_name = 'survey_list.html'
     user = request.user
 
+    today = datetime.now()
     
     if user.is_staff:
             return redirect('admin:index')
@@ -20,7 +22,7 @@ def employee_survey_list_view(request):
         return redirect('login')
 
     context={
-        'employee_survey_list': user.employee.survey_set.all()
+        'employee_survey_list': user.employee.survey_set.filter(survey__start_date__lte=today)
     }
 
     return render(request, template_name, context)
