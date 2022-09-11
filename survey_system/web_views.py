@@ -1,10 +1,9 @@
 from datetime import datetime
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView
-from employee.models import Employee
 from django.contrib.auth.decorators import login_required
 from .models import Answer
+from django.core.paginator import Paginator
 
 from survey_system.models import EmployeeSurvey
 
@@ -17,10 +16,15 @@ def employee_survey_list_view(request):
     today = datetime.now()
 
     order_by = request.GET.get('order', '')
+    page = request.GET.get('page', 1)
+
     print(order_by)
 
     if order_by:
-        queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"survey__{order_by}")
+        if order_by == 'is_submitted':
+            queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"{order_by}")
+        else:
+            queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"survey__{order_by}")
     else:
         queryset = user.employee.survey_set.filter(survey__start_date__lte=today)
     
@@ -29,9 +33,12 @@ def employee_survey_list_view(request):
     elif user.is_anonymous:
         return redirect('login')
 
+    paginator = Paginator(queryset, 5)
+
     context={
         'order_by':order_by,
-        'employee_survey_list': queryset
+        'employee_survey_list': paginator.page(page).object_list,
+        'page_obj':paginator.page(page)
     }
 
     return render(request, template_name, context)
