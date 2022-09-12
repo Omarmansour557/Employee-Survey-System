@@ -4,6 +4,5 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register('',views.SurveyViewSet, basename='survey-list')
-router.register('', views.DemoViewSet)
 urlpatterns = router.urls
 

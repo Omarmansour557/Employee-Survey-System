@@ -16,11 +16,11 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['rating', 'quetion']
+        fields = ['rating', 'question']
 class EmployeeSurveySerializer(serializers.ModelSerializer):
     rater = serializers.StringRelatedField()
     get_rated = serializers.StringRelatedField()
     answers = AnswerSerializer(many=True)
     class Meta:
         model = EmployeeSurvey
-        fields = ['is_submitted', 'rater', 'get_rated', 'survey', 'submited_date', 'answers']
+        fields = ['id','is_submitted', 'rater', 'get_rated', 'survey', 'submited_date', 'answers']
