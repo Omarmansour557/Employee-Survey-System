@@ -7,10 +7,11 @@
 
 {% endblock head %}
 {% block body %}
+
 <div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card shadow mt-4">
+  <div class="row mt-4 mb-4">
+    <div class="col-10">
+      <div class="card shadow">
         <h3 class="card-header text-center">User Surveys</h3>
         <div class="card-body">
             {% for employee_survey in employee_survey_list %}
@@ -24,6 +25,12 @@
                             {% else %}
                               <span class="badge badge-danger ml-1" style="font-size:45%">Open</span>
                             {% endif %}
+
+                            {% if employee_survey.survey.is_expired %}
+                              <span class="badge badge-secondary ml-1" style="font-size:45%">Expired</span>
+                            {% else %}
+                              <span class="badge badge-warning ml-1" style="font-size:45%">Due</span>
+                            {% endif %}
                             <span class="badge badge-primary ml-1" style="font-size:45%">{{employee_survey.survey.get_survey_type}}</span>
 
                           </h4>
@@ -34,21 +41,34 @@
                             <div class="card-text">
                               <div class="container">
                                 <div class="row">
-                                    <h5>Description:</h5>
+                                    <h5><strong>Description:</strong></h5>
                                 </div>
                                 <div class="row">
                                   <p class='ml-3'>{{employee_survey.survey.description}}</p>
                                 </div>
+                                {% if employee_survey.get_rated %}
+                                  <div class="row">
+                                    <h5><strong>Rating:</strong></h5>
+                                  </div>
+
+                                  <div class="row">
+                                    <p class='ml-3'><strong>{{employee_survey.get_rated.name}}</strong></p>
+                                  </div>
+                                {% endif %}
+                                
+                                <div class="row">
+
+                                </div>
                                 <div class="row justify-content-between">
                                   <div class="col-4">
                                     <p>
-                                      Start Date: {{employee_survey.survey.start_date}}
+                                      <strong>Start Date:</strong> {{employee_survey.survey.start_date}}
                                     </p>
                                   </div>
 
                                   <div class="col-4">
                                     <p>
-                                      End Date: {{employee_survey.survey.end_date}}
+                                      <strong>End Date:</strong> {{employee_survey.survey.end_date}}
                                     </p>
                                   </div>
                                 </div>
@@ -61,9 +81,77 @@
             {% endfor %} 
 
         </div>
+
+        <div class="row m-3">
+          <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                  {% if page_obj.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+                  {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
+                  {% endif %}
+      
+                  {% with ''|center:page_obj.paginator.num_pages as range %}
+                      {% for _ in range %}
+                          {% if forloop.counter == page_obj.number %}
+                              <li class="page-item active"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>    
+                          {% else %}
+                              <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+                  {% endwith %}
+      
+                  {% if page_obj.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                  {% else %}
+                  <li class="page-item disabled"><a class="page-link" href="?page=">Next</a></li>
+                  {% endif %}
+                
+              </ul>
+            </nav>
+        </div>
+      </div><!--Main Card-->
+    </div>
+
+    <div class="col-2">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h3 class="card-title text-center">Order by</h3>
+        </div>
+        <div class="card-body">
+          <form method="GET">
+            <input type="hidden" name="page" value={{page_obj.number}}>
+
+            <div class="form-check">
+              <input {% if order_by == 'title' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-title" value="title">
+              <label class="form-check-label" for="order-title">Title</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'start_date' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-start" value="start_date">
+              <label class="form-check-label" for="order-start">Start Date</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'end_date' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-end" value="end_date">
+              <label class="form-check-label" for="order-end">End Date</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'is_submitted' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-submitted" value="is_submitted">
+              <label class="form-check-label" for="order-submitted">Submitted</label>
+            </div>
+
+            <div class="form-group">
+              <button class="btn bg-primary text-light mt-2" type="submit">Order</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
+
   </div>
+
 </div>
 
 

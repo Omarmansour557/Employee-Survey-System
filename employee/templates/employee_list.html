@@ -66,9 +66,6 @@
                             {% endfor %}
                         {% endwith %}
 
-                        {% comment %} <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li> {% endcomment %}
                         {% if page_obj.has_next %}
                             <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
                         {% else %}
