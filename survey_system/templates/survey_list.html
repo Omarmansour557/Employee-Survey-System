@@ -20,6 +20,7 @@
                         <div class="card-header">
                           <h4 class="card-card-title">
                             {{employee_survey.survey.title}}
+                            {{employee_survey.is_submitted}}
                             {% if employee_survey.is_submitted %}
                               <span class="badge badge-success ml-1" style="font-size:45%">Submitted</span>
                             {% else %}
@@ -86,7 +87,7 @@
           <nav aria-label="Page navigation example">
               <ul class="pagination">
                   {% if page_obj.has_previous %}
-                      <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">Previous</a></li>
                   {% else %}
                       <li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
                   {% endif %}
@@ -96,13 +97,13 @@
                           {% if forloop.counter == page_obj.number %}
                               <li class="page-item active"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>    
                           {% else %}
-                              <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                              <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">{{forloop.counter}}</a></li>
                           {% endif %}
                       {% endfor %}
                   {% endwith %}
       
                   {% if page_obj.has_next %}
-                      <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">Next</a></li>
                   {% else %}
                   <li class="page-item disabled"><a class="page-link" href="?page=">Next</a></li>
                   {% endif %}
@@ -140,6 +141,16 @@
             <div class="form-check">
               <input {% if order_by == 'is_submitted' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-submitted" value="is_submitted">
               <label class="form-check-label" for="order-submitted">Submitted</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if order_by == 'is_expired' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-expired" value="is_expired">
+              <label class="form-check-label" for="order-expired">Expired</label>
+            </div>
+
+            <div class="form-check mt-3">
+              <input {% if reverse %}checked{% endif %} class="form-check-input" type="checkbox" name="reverse" id="order-reverse" value="-">
+              <label class="form-check-label" for="order-reverse">Reverse</label>
             </div>
 
             <div class="form-group">
