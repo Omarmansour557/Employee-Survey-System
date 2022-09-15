@@ -10,8 +10,14 @@ from survey_system.models import EmployeeSurvey
 
 @login_required()
 def employee_survey_list_view(request):
+    
     template_name = 'survey_list.html'
     user = request.user
+
+    if user.is_staff:
+        return redirect('admin:index')
+    elif user.is_anonymous:
+        return redirect('login')
 
     today = datetime.now()
 
@@ -32,10 +38,7 @@ def employee_survey_list_view(request):
     else:
         queryset = user.employee.survey_set.filter(survey__start_date__lte=today)
     
-    if user.is_staff:
-            return redirect('admin:index')
-    elif user.is_anonymous:
-        return redirect('login')
+
 
     paginator = Paginator(queryset, 5)
 
