@@ -6,7 +6,8 @@ from .models import Answer
 from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
 from survey_system.models import EmployeeSurvey
-
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 @login_required()
 def employee_survey_list_view(request):
@@ -72,20 +73,32 @@ def employee_survey_detail_view(request, pk):
             employee_survey = model.objects.get(pk=pk)
             questions = employee_survey.survey.get_questions
             answers = request.POST.getlist('answer')
+            ws_coonsumer_answers = []
 
             if employee_survey.answers.all():
                 for old_answer, new_answer in zip(employee_survey.answers.all(), answers):
                     old_answer.rating = new_answer
                     old_answer.save()
+                    ws_coonsumer_answers.append(new_answer)
             else:
                 for question, answer in zip(questions, answers):
                     answer = Answer(question=question, rating=answer)
                     answer.save()
                     employee_survey.answers.add(answer)
+                    ws_coonsumer_answers.append(answer.rating)
 
             employee_survey.is_submitted = True
             employee_survey.save()
 
+            channel_layer = get_channel_layer()
+
+            async_to_sync(channel_layer.group_send)('survey-detail',
+            {
+                'type':'new_answers',
+                'status':'submitted',
+                'answers':ws_coonsumer_answers
+            }
+            )
             return redirect('survey_detail', pk)
 
     else:
