@@ -9,6 +9,7 @@
 {% endblock head %}
 
 {% block body %}
+<div class="alert" id='alert-div' role="alert"></div>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -17,12 +18,11 @@
                     <h3 class="card-title text-center">
                         <strong>{{employee_survey.survey.title}}</strong>
                     </h3>
-                    {% if employee_survey.is_submitted %}
-                        <span class="badge badge-success" style="" 
-                        data-toggle="tooltip" data-placement="top" title="You have submitted this survey!">Submitted</span>
-                    {% else %}
-                    <span class="badge badge-danger" style="" 
-                    data-toggle="tooltip" data-placement="top" title="Survey not yet submitted!">Open</span>
+                    
+                    {% if employee_survey.survey.is_expired %}
+                        <span class="badge badge-secondary ml-1" data-toggle="tooltip" data-placement="top" title="Survey has expired, it can't be submitted">Expired</span>
+                     {% else %}
+                        <span class="badge badge-warning ml-1" data-toggle="tooltip" data-placement="top" title="Survey is due!">Due</span>
                     {% endif %}
                     <span class="badge badge-primary" style="" >{{employee_survey.survey.get_survey_type}}</span>
 
@@ -70,12 +70,12 @@
                                                                     <input
                                                                     class="rating"
                                                                     max="5"
-                                                                    oninput="this.style.setProperty('--value', this.value)"
-                                                                    step="0.5"
+                                                                    oninput="this.style.setProperty('--value', this.value);input_handler(this)"
+                                                                    step="0.1"
                                                                     name="answer"
                                                                     type="range"
                                                                     value="{{answer.rating}}" style="--value:{{answer.rating}}"
-                                                                    {% if employee_survey.survey.is_expired %}disabled{% endif %}
+                                                                    {% if employee_survey.survey.is_expired or user.is_staff %}disabled{% endif %}
                                                                     >
                                                                 </label>
                                                             </p>
@@ -95,13 +95,14 @@
                                                                         <input
                                                                         class="rating"
                                                                         max="5"
-                                                                        oninput="this.style.setProperty('--value', this.value)"
+                                                                        oninput="this.style.setProperty('--value', this.value);input_handler(this)"
                                                                         step="0.1"
                                                                         type="range"
                                                                         value="0" 
                                                                         name="answer"
                                                                         style="--value:0"
-                                                                        {% if employee_survey.survey.is_expired %}disabled{% endif %}
+                                                                        {% if employee_survey.survey.is_expired or user.is_staff %}disabled{% endif %}
+                                                                        
                                                                         >
                                                                     </label>
                                                                 </p>
@@ -113,7 +114,7 @@
                                             {% endif %}
                                         </ul>
                                     </div>
-                                    {% if not employee_survey.survey.is_expired %}
+                                    {% if not employee_survey.survey.is_expired and not user.is_staff %}
                                         <div class="row justify-content-center">
                                             <button type="submit" class="btn bg-success text-light">Submit</button>
                                         </div>
@@ -138,5 +139,52 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
           })
+    </script>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8000/ws/survey-detail/')
+
+        function input_handler(element){
+            
+            
+            const inputs = Array.from(document.querySelectorAll('.rating'));
+            console.log('inputs', inputs)
+            let ratings = inputs.map((input) => {
+                let element_styles = getComputedStyle(input);
+                let rating = element_styles.getPropertyValue('--value')
+                return rating
+            })
+            ws.send(JSON.stringify(ratings))
+        }
+
+        ws.onmessage = (e)=>{
+            console.log(e)
+            const data = JSON.parse(e.data) 
+            console.log('data', data)
+            const answers = data.answers;
+            console.log('answers', answers)
+            let rating_inputs = document.querySelectorAll('.rating')
+            console.log(rating_inputs)
+            let i = 0
+            rating_inputs.forEach((input) => {
+                if(answers[i]){
+                    {% comment %} console.log('answer[i]', JSON.parse(answers)) {% endcomment %}
+                    input.style.setProperty('--value', answers[i++])
+                }
+            })
+
+            const alert_div = document.querySelector('#alert-div')
+
+            if(data.status == 'editing'){
+                alert_div.classList.remove('alert-success');
+                alert_div.classList.add('alert-warning');
+                alert_div.innerText = 'This page is being edited right now'
+            }else if(data.status == 'submitted'){
+                alert_div.classList.remove('alert-warning');
+                alert_div.classList.add('alert-success');
+                alert_div.innerText = 'This page was submitted'
+            }
+        }
+
     </script>
 {% endblock scripts %}
