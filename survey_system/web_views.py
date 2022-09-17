@@ -23,28 +23,43 @@ def employee_survey_list_view(request):
     today = datetime.now()
 
     order_by = request.GET.get('order', '')
+    filter_by = request.GET.get('filter', '')
+    survey_type = request.GET.get('survey_type', '')
     page = request.GET.get('page', 1)
     reverse = request.GET.get('reverse', '')
 
     print(order_by)
+    print(filter_by)
+    print(survey_type)
+
+    queryset = user.employee.survey_set.filter(survey__start_date__lte=today)
+
+    if survey_type in ['F','R','G']:
+            queryset = queryset.filter(survey__survey_type=survey_type)
+
+    if filter_by:
+        if filter_by == "due":
+            queryset = queryset.filter(survey__end_date__gte=today)
+        elif filter_by == "expired":
+            queryset = queryset.filter(survey__end_date__lt=today)
 
     if order_by:
         if order_by == 'is_submitted':
-            queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"{reverse}{order_by}")
+            queryset = queryset.order_by(f"{reverse}{order_by}")
         elif order_by == 'is_expired':
-            queryset = sorted(user.employee.survey_set.filter(survey__start_date__lte=today), key = lambda emp_survey: emp_survey.survey.is_expired ,reverse=bool(reverse))
-            print(queryset)
+            queryset = sorted(queryset, key = lambda emp_survey: emp_survey.survey.is_expired ,reverse=bool(reverse))
         else:
-            queryset = user.employee.survey_set.filter(survey__start_date__lte=today).order_by(f"{reverse}survey__{order_by}")
-    else:
-        queryset = user.employee.survey_set.filter(survey__start_date__lte=today)
-    
+            queryset = queryset.order_by(f"{reverse}survey__{order_by}")
+        
 
+    
 
     paginator = Paginator(queryset, 5)
 
     context={
         'order_by':order_by,
+        'filter_by':filter_by,
+        'survey_type':survey_type,
         'employee_survey_list': paginator.page(page).object_list,
         'page_obj':paginator.page(page),
         'reverse':reverse

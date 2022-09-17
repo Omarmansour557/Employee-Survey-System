@@ -85,7 +85,7 @@
           <nav aria-label="Page navigation example">
               <ul class="pagination">
                   {% if page_obj.has_previous %}
-                      <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">Previous</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}{% if filter_by %}&filter={{filter_by}}{% endif %}{% if survey_type %}&survey_type={{survey_type}}{% endif %}">Previous</a></li>
                   {% else %}
                       <li class="page-item disabled"><a class="page-link" href="">Previous</a></li>
                   {% endif %} 
@@ -95,13 +95,13 @@
                           {% if forloop.counter == page_obj.number %}
                               <li class="page-item active"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>    
                           {% else %}
-                              <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">{{forloop.counter}}</a></li>
+                              <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}{% if filter_by %}&filter={{filter_by}}{% endif %}{% if survey_type %}&survey_type={{survey_type}}{% endif %}">{{forloop.counter}}</a></li>
                           {% endif %}
                       {% endfor %}
                   {% endwith %}
       
                   {% if page_obj.has_next %}
-                      <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}">Next</a></li>
+                      <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}{% if order_by %}&order={{order_by}}{% endif %}{% if reverse %}&reverse={{reverse}}{% endif %}{% if filter_by %}&filter={{filter_by}}{% endif %}{% if survey_type %}&survey_type={{survey_type}}{% endif %}">Next</a></li>
                   {% else %}
                   <li class="page-item disabled"><a class="page-link" href="?page=">Next</a></li>
                   {% endif %}
@@ -115,11 +115,14 @@
     <div class="col-2">
       <div class="card shadow-sm">
         <div class="card-header">
-          <h3 class="card-title text-center">Order by</h3>
+          <h3 class="card-title text-center">Order</h3>
         </div>
         <div class="card-body">
           <form method="GET">
             <input type="hidden" name="page" value={{page_obj.number}}>
+            <input type="hidden" name="filter" value={{filter_by}}>
+            <input type="hidden" name="survey_type" value={{survey_type}}>
+
 
             <div class="form-check">
               <input {% if order_by == 'title' %}checked{% endif %} class="form-check-input" type="radio" name="order" id="order-title" value="title">
@@ -153,6 +156,53 @@
 
             <div class="form-group">
               <button class="btn bg-primary text-light mt-2" type="submit">Order</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-3">
+        <div class="card-header">
+          <h3 class="card-title text-center">Filter</h3>
+        </div>
+        <div class="card-body">
+          <form method="GET">
+            <input type="hidden" name="order" value={{order_by}}>
+            <input type="hidden" name="reverse" value={{reverse}}>
+            <h5><strong>Survey Type</strong></h5>
+            <div class="form-check">
+              <input {% if survey_type == 'F' %}checked{% endif %} class="form-check-input" type="radio" name="survey_type" id="survey-followers" value="F">
+              <label class="form-check-label" for="survey-followers">Followers</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if survey_type == 'R' %}checked{% endif %} class="form-check-input" type="radio" name="survey_type" id="survey-reverse" value="R">
+              <label class="form-check-label" for="survey-reverse">Reverse</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if survey_type == 'G' %}checked{% endif %} class="form-check-input" type="radio" name="survey_type" id="survey-general" value="G">
+              <label class="form-check-label" for="survey-general">General</label>
+            </div>
+
+            <hr>
+
+            <h5><strong>Status</strong></h5>
+            <div class="form-check">
+              <input {% if filter_by == 'due' %}checked{% endif %} class="form-check-input" type="radio" name="filter" id="filter-due" value="due">
+              <label class="form-check-label" for="filter-due">Due</label>
+            </div>
+
+            <div class="form-check">
+              <input {% if filter_by == 'expired' %}checked{% endif %} class="form-check-input" type="radio" name="filter" id="filter-expired" value="expired">
+              <label class="form-check-label" for="filter-expired">Expired</label>
+            </div>
+
+            
+
+
+            <div class="form-group">
+              <button class="btn bg-primary text-light mt-2" type="submit">Filter</button>
             </div>
           </form>
         </div>
