@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from employee.models import Employee
+from django.urls import reverse
 # Create your models here
 
 class Questions(models.Model):
@@ -65,4 +66,8 @@ class EmployeeSurvey(models.Model):
     
     def __str__(self) -> str:
         return f"{self.rater} rating {self.get_rated} on survey {self.survey.title}"
+    
+    def get_absolute_url(self):
+        return reverse("survey_detail", kwargs={"pk": self.pk})
+    
 

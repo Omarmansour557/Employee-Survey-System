@@ -13,19 +13,17 @@
     <div class="col-10">
       <div class="card shadow">
         <h3 class="card-header text-center">User Surveys</h3>
-        <div class="card-body">
+        <div class="card-body" id='main-card-body'>
+          <div id="new-surveys" class='mb-4' style="display: none;">
+
+            <hr>
+          </div>
             {% for employee_survey in employee_survey_list %}
                   <div class="card card-hover shadow-sm my-3">
                     <a href="{% url 'survey_detail' employee_survey.pk %}">
                         <div class="card-header">
                           <h4 class="card-card-title">
                             {{employee_survey.survey.title}}
-                            {{employee_survey.is_submitted}}
-                            {% if employee_survey.is_submitted %}
-                              <span class="badge badge-success ml-1" style="font-size:45%">Submitted</span>
-                            {% else %}
-                              <span class="badge badge-danger ml-1" style="font-size:45%">Open</span>
-                            {% endif %}
 
                             {% if employee_survey.survey.is_expired %}
                               <span class="badge badge-secondary ml-1" style="font-size:45%">Expired</span>
@@ -167,3 +165,104 @@
 
 
 {% endblock body %}
+
+{% block scripts %}
+<script type='text/javascript'>
+  console.log()
+
+  const ws = new WebSocket('ws://localhost:8000/ws/survey/')
+  const survey_type_lookup ={
+    'F':'Followers',
+    'R':'Reverse',
+    'G':'General'
+  }
+  
+  ws.onmessage = (e) => {
+      let data = JSON.parse(e.data)
+      const surveys = data.surveys;
+      console.log('surveys', surveys);
+  
+      const new_surveys_div = document.querySelector('#new-surveys');
+      new_surveys_div.style.display = 'block'
+      surveys.forEach((employee_survey)=>{
+          console.log(employee_survey)
+          const card = document.createElement('div');
+          card.classList.add('card', 'card-hover', 'shadow-sm', 'my-3');
+          card.innerHTML = 
+          `
+            <a href="${employee_survey.url}">
+                <div class="card-header">
+                  <h4 class="card-card-title">
+                  ${employee_survey.survey.title}
+                  ${(() => {
+                    if (employee_survey.survey.is_expired) {
+                      return `
+                        <span class="badge badge-secondary ml-1" style="font-size:45%">Expired</span>
+                      `
+                    } else {
+                      return `<span class="badge badge-warning ml-1" style="font-size:45%">Due</span>`
+                    }
+                  })()}
+                    
+                    <span class="badge badge-primary ml-1" style="font-size:45%">${survey_type_lookup[employee_survey.survey.survey_type]}</span>
+                    <span class="badge badge-danger ml-1" style="font-size:45%">New</span>
+    
+                  </h4>
+                  
+                </div>
+                <div class="card-body">
+                  
+                    <div class="card-text">
+                      <div class="container">
+                        <div class="row">
+                            <h5><strong>Description:</strong></h5>
+                        </div>
+                        <div class="row">
+                          <p class='ml-3'>${employee_survey.survey.description}</p>
+                        </div>
+                        ${
+                            (
+                                ()=>{
+                                    if(employee_survey.get_rated){
+                                        return `
+                                        <div class="row">
+                                            <h5><strong>Rating:</strong></h5>
+                                        </div>
+    
+                                        <div class="row">
+                                            <p class='ml-3'><strong>${employee_survey.get_rated}</strong></p>
+                                        </div>
+                                        `
+                                    }
+                                }
+                            )()
+                        }
+                        
+                        <div class="row">
+    
+                        </div>
+                        <div class="row justify-content-between">
+                          <div class="col-4">
+                            <p>
+                              <strong>Start Date:</strong> ${employee_survey.survey.start_date}
+                            </p>
+                          </div>
+    
+                          <div class="col-4">
+                            <p>
+                              <strong>End Date:</strong> ${employee_survey.survey.end_date}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </a>
+          `
+          new_surveys_div.prepend(card)
+    
+      })
+      
+  }
+</script>
+{% endblock scripts %}
