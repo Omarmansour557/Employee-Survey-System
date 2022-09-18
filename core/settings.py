@@ -100,7 +100,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [env.str('REDIS_HOST')],
         },
     },
 }
@@ -189,7 +189,7 @@ SIMPLE_JWT = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_BROKER_URL = env.str('CELERY_BROKER_URL')
 CELERY_BEAT_SCHEDULE = {
     'notify_customers': {
         'task': 'survey_system.tasks.notify_employees',

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  redis-db:
+    image: redis:latest
+    container_name: redis-db
+
+    ports:
+      - 6379:6379
+
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: survey_system
+    container_name: survey_system_container
+    environment:
+      CELERY_BROKER_URL: redis://redis-db:6379/1
+      REDIS_HOST: redis://redis-db:6379
+    ports:
+      - 8000:8000
+      - 5555:5555
+    links:
+      - redis-db
+
+
+
