@@ -2,6 +2,7 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
 from .serializers import WebsocketEmployeeSurveySerializer
+from .models import EmployeeSurvey
 class SurveyListConsumer(WebsocketConsumer):
     
     def connect(self):
@@ -22,7 +23,8 @@ class SurveyListConsumer(WebsocketConsumer):
         print('new surveys', new_surveys)
         user_surveys = []
         print(self.scope['user'])
-        for survey in new_surveys:
+        for survey_id in new_surveys:
+            survey = EmployeeSurvey.objects.get(id=survey_id)
             if survey.rater.user.pk == self.scope['user'].pk:
                 serialized_survey = WebsocketEmployeeSurveySerializer(survey)
                 user_surveys.append(serialized_survey.data)
