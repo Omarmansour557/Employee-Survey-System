@@ -10,7 +10,7 @@ services:
       - 6379:6379
 
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     image: survey_system
@@ -23,6 +23,3 @@ services:
       - 5555:5555
     links:
       - redis-db
-
-
-
